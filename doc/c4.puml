@@ -1,0 +1,35 @@
+@startuml C4_Elements
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!include puml-resources/common.puml
+!define DEVICONS puml-resources/devicons
+!define FONTAWESOME puml-resources/font-awesome-5
+
+!include DEVICONS/angular.puml
+!include DEVICONS/java.puml
+!include FONTAWESOME/users.puml
+
+LAYOUT_TOP_DOWN()
+
+Boundary(FreiremarInternal, "Freiremar Internal"){
+    System(central, "Central", "Central web app")
+    System(sap, "SAP-PI", "FI/CO")
+    System(siges, "SIGES", "LO/SD")
+    System(epsilon, "Epsilon", "RRHH")
+}
+
+Boundary(FreiremarExternal, "Freiremar External"){
+    System_Ext(api, "API", "Azure API")    
+    System_Ext(buque, "Buque", "Buques app")
+    System_Ext(ad, "Azure AD", "Active Directory")    
+    System_Ext(ex, "Email", "Email")
+}
+
+Rel(api, ad, "Authentication")
+Rel(api, ex, "Notifications")
+Rel(api, epsilon, "Mareas")
+Rel(api, siges, "Pedidos/Albaranes")
+Rel(api, sap, "PI")
+Rel(central, api, "")
+Rel(buque, api, "send/receive", "HTTPS/REST")
+@enduml

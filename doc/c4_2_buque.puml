@@ -1,0 +1,49 @@
+
+@startuml C4_Elements_2
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!include puml-resources/common.puml
+!define DEVICONS puml-resources/devicons
+!define FONTAWESOME puml-resources/font-awesome-5
+
+!include DEVICONS/angular.puml
+!include DEVICONS/postgresql.puml
+!include FONTAWESOME/users.puml
+LAYOUT_TOP_DOWN()
+
+
+Boundary(az, "API"){   
+    Container(api, "Web API", "API")    
+    Container(spa, "SPA", "angular", "Main API UI", $sprite="angular")
+}
+
+Boundary(fr, "Freiremar"){   
+    Person(admin, "Administrador", "")
+    Rel(admin, spa, "Administracion")
+
+    Person(aduanas, "Aduanas", "Certficados Sanitarios", $sprite="users")
+    Rel(aduanas, spa, "")
+
+    Person(stock, "Stock", "Almacen/Stock", "", $sprite="users")
+    Rel(stock, spa, "")
+
+    Person(sd, "Compras/Ventas", "Pedidos", "", $sprite="users")
+    Rel(sd, spa, "")
+}
+
+Boundary(Buque, "Buque"){
+    Container(buqueApi, "Buque Api", "API")
+    Container(buqueApp, "Buque App", "Desktop Online/Offline App", "Crea lances y los envia a la central diariamente automaticamente. Maestros sincronizados desde la API mediante polling.")
+    Person(captains, "Patrones", "", $sprite="users")
+    ContainerDb(sqlLite, "Database", "", "sqlLite")
+
+    Rel(captains, buqueApp, "")
+    System(buqueMob, "Buque Mobile App")
+    Rel(buqueApp, buqueApi, "")
+    Rel(buqueMob, buqueApi, "")
+
+    Rel(buqueApi, api, "")
+    Rel(buqueApi, sqlLite, "Read/Write")
+}
+
+@enduml

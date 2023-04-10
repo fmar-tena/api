@@ -1,0 +1,65 @@
+
+@startuml C4_Elements_2
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!include puml-resources/common.puml
+!define DEVICONS puml-resources/devicons
+!define FONTAWESOME puml-resources/font-awesome-5
+
+!include DEVICONS/angular.puml
+!include DEVICONS/postgresql.puml
+!include FONTAWESOME/users.puml
+LAYOUT_TOP_DOWN()
+
+
+Boundary(az, "API"){
+    Container(spa, "SPA", "angular", "Main API UI", $sprite="angular")
+    Container(api, "Web API", "API")
+    Container(authz, "SSO", "Authorization")
+    Container(ad, "Azure AD", "Authentication")
+    Container(gw, "Gateway", "AZ Gateway", "")
+    Container(storage, "Azure Storage", "TF state", "state locking")
+    Container(mail, "Mail", "Exchange", "Notifications")
+    ContainerDb(db, "Database", "", "", $sprite="postgresql")
+
+    Rel(spa, api, "HTTPS", "REST/Socket")
+    Rel(api, storage, "", "")
+    Rel(api, mail, "", "")
+    Rel(api, authz, "", "")
+    Rel(gw, spa, "", "")
+    Rel(gw, api, "HTTPS", "REST/Socket")
+    Rel(authz, ad, "", "")
+}
+
+Boundary(fr, "Freiremar"){
+   
+    Person(admin, "Administrador", "")
+    Rel(admin, gw, "Administracion")
+
+    Person(aduanas, "Aduanas", "Certficados Sanitarios", $sprite="users")
+    Rel(aduanas, gw, "")
+
+    Person(stock, "Stock", "Almacen/Stock", "", $sprite="users")
+    Rel(stock, gw, "")
+
+    Person(sd, "Compras/Ventas", "Pedidos", "", $sprite="users")
+    Rel(sd, gw, "")
+}
+
+
+Boundary(Buque, "Buque"){
+    Container(buqueApi, "Buque Api", "API")
+    Container(buqueApp, "Buque App", "Desktop App")
+    Person(captains, "Patrones", "", $sprite="users")
+    ContainerDb(sqlLite, "Database", "", "sqlLite")
+
+    Rel(captains, buqueApp, "")
+    System(buqueMob, "Buque Mobile App")
+    Rel(buqueApp, buqueApi, "")
+    Rel(buqueMob, buqueApi, "")
+
+    Rel(buqueApi, gw, "")
+    Rel(buqueApi, sqlLite, "Read/Write")
+}
+
+@enduml

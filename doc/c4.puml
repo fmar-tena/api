@@ -16,6 +16,7 @@ Boundary(FreiremarInternal, "Freiremar Internal"){
     System(sap, "SAP-PI", "FI/CO")
     System(siges, "SIGES", "LO/SD")
     System(epsilon, "Epsilon", "RRHH")
+    System(bi, "BI", "Data Analytics")
 }
 
 Boundary(FreiremarExternal, "Freiremar External"){
@@ -31,5 +32,6 @@ Rel(api, epsilon, "Mareas")
 Rel(api, siges, "Pedidos/Albaranes")
 Rel(api, sap, "PI")
 Rel(central, api, "")
+Rel(api, bi, "readonly")
 Rel(buque, api, "send/receive", "HTTPS/REST")
 @enduml

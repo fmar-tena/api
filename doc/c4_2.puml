@@ -44,6 +44,10 @@ Boundary(fr, "Freiremar"){
 
     Person(sd, "Compras/Ventas", "Pedidos", "", $sprite="users")
     Rel(sd, gw, "")
+
+    System(bi, "BI", "Data Analytics")
+    Rel(admin, bi, "Forecast")
+    Rel(bi, gw, "Forecast")
 }
 
 

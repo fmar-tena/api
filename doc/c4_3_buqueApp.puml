@@ -1,0 +1,28 @@
+
+@startuml C4_Elements_2
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!include puml-resources/common.puml
+!define DEVICONS puml-resources/devicons
+!define FONTAWESOME puml-resources/font-awesome-5
+
+!include DEVICONS/angular.puml
+!include DEVICONS/krakenjs.puml
+!include FONTAWESOME/users.puml
+LAYOUT_TOP_DOWN()
+
+Boundary(Buque, "Buque"){
+    Container(buqueApi, "Buque Api", "API")
+    Container(buqueApp, "Buque App [UUID]", "Desktop Online/Offline Multitenant App", "Crea lances y los envia a la central diariamente automaticamente. Maestros sincronizados desde la API mediante polling.", $sprite="krakenjs")
+    Person(captains, "Patrones", "", $sprite="users")
+    ContainerDb(sqlLite, "Database", "", "sqlLite")
+
+    Rel(captains, buqueApp, "")
+    Container(buqueMob, "Buque Mobile App [UUID]", "Conectada via WiFi al API", "Para la sala de clasificaciones, gestion del almacen (congeladores) dentro del buque.")
+    Rel(buqueApp, buqueApi, "")
+    Rel(buqueMob, buqueApi, "")
+    Rel(buqueApi, sqlLite, "Read/Write")
+}
+
+footer Aplicacion standalone de cada buque
+@enduml

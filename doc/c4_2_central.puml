@@ -1,0 +1,44 @@
+
+@startuml C4_Elements_2
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!include puml-resources/common.puml
+!define DEVICONS puml-resources/devicons
+!define FONTAWESOME puml-resources/font-awesome-5
+
+!include DEVICONS/angular.puml
+!include DEVICONS/krakenjs.puml
+!include FONTAWESOME/users.puml
+LAYOUT_TOP_DOWN()
+
+
+Boundary(az, "API"){   
+    Container(api, "Web API", "API")    
+    Container(spa, "SPA", "Main API UI", "Modular, autorizable, integrada, escalable.", $sprite="angular")
+    Rel(api, spa, "HTTP/REST")
+}
+
+Boundary(fr, "Freiremar"){   
+    Person(admin, "Administrador", "Configura mareas, dashboard, rendimiento, comparativas, forecast, subastas, ventas.")
+    Rel(admin, spa, "Administracion")
+
+    Person(aduanas, "Aduanas", "Documentación", $sprite="users")
+    Rel(aduanas, spa, "Certificados Sanitarios")
+
+    Person(stock, "Stock", "", "", $sprite="users")
+    Rel(stock, spa, "Almacen")
+
+    Person(sd, "Compras/Ventas", "", "", $sprite="users")
+    Rel(sd, spa, "Pedidos")
+    
+    System(bi, "BI", "Data Analytics")
+    Rel(admin, bi, "Forecast")
+    Rel(bi, api, "readonly")
+}
+
+Boundary(Buque, "Buque"){
+    Container(buqueApi, "Buque Api", "API")    
+    Rel(buqueApi, api, "HTTPS/REST")
+}
+footer Api Central con Frontend 
+@enduml

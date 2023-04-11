@@ -22,16 +22,14 @@ Boundary(FreiremarInternal, "Freiremar Internal"){
 Boundary(FreiremarExternal, "Freiremar External"){
     System_Ext(api, "API", "Azure API")    
     System_Ext(buque, "Buque", "Buques app")
-    System_Ext(ad, "Azure AD", "Active Directory")    
     System_Ext(ex, "Email", "Email")
 }
 
-Rel(api, ad, "Authentication")
 Rel(api, ex, "Notifications")
-Rel(api, epsilon, "Mareas")
-Rel(api, siges, "Pedidos/Albaranes")
+Rel(sap, epsilon, "Mareas")
+Rel(sap, siges, "Pedidos/Albaranes")
 Rel(api, sap, "PI")
 Rel(central, api, "")
-Rel(api, bi, "readonly")
+Rel(bi, api, "readonly")
 Rel(buque, api, "send/receive", "HTTPS/REST")
 @enduml

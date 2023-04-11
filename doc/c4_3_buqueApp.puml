@@ -1,6 +1,7 @@
 
 @startuml C4_Elements_2
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 !include puml-resources/common.puml
 !define DEVICONS puml-resources/devicons
@@ -11,18 +12,45 @@
 !include FONTAWESOME/users.puml
 LAYOUT_TOP_DOWN()
 
-Boundary(Buque, "Buque"){
-    Container(buqueApi, "Buque Api", "API")
-    Container(buqueApp, "Buque App [UUID]", "Desktop Online/Offline Multitenant App", "Crea lances y los envia a la central diariamente automaticamente. Maestros sincronizados desde la API mediante polling.", $sprite="krakenjs")
-    Person(captains, "Patrones", "", $sprite="users")
-    ContainerDb(sqlLite, "Database", "", "sqlLite")
+System_Boundary(buque_app, "APP"){    
+    Container(buqueApp, "Buque App [UUID]", "Desktop Online/Offline Multitenant App", "Crea lances y los envia a la central diariamente automaticamente. Maestros sincronizados desde la API mediante polling.", $sprite="krakenjs")    
+}
 
-    Rel(captains, buqueApp, "")
-    Container(buqueMob, "Buque Mobile App [UUID]", "Conectada via WiFi al API", "Para la sala de clasificaciones, gestion del almacen (congeladores) dentro del buque.")
+
+System_Boundary(buque_api, "API"){
+    Container(buqueApi, "Buque Api", "API")    
+    ContainerDb(sqlLite, "Database", "", "sqlLite")
+    Component(dashboard, "Home", "Pagina principal", "Grafico rendimiento marea actual.")
+    Component(stats, "Stats", "Estadisticas", "Graficos comparativos marea.")
+    Component(buque, "Buque", "Gestion del buque", "Caracteristicas, identificadores, etc.")
+    Component(mareas, "Mareas", "Gestion de mareas", "Listado y visualizacion de mareas anteriores. Edicion de la marea actual.")
+    Component(tripulacion, "Tripulacion", "Gestion de tripulacion", "")
+    Component(lances, "Lances", "Gestion de Lances", "")
+    Component(notasDiarias, "NPD", "Gestion de notas de pesca diaria", "ReadOnly")
+    Component(notasFinales, "NPF", "Gestion de notas de pesca finales", "Editable")
+    Component(entrepot, "Entrepot", "Gestion de entrepots", "")
+    Component(transbordos, "Transbordos", "Gestion de transbordos", "")
+    Component(dea, "DEA", "Generacion del DEA", "ReadOnly")
+    Component(mantenimiento, "Mantenimiento", "Gestion de mantenimiento del buque")
+    Component(pedidos, "Pedidos", "ReadOnly")
+
+    component "maestros" as alias <<stereotype>> {
+        Component(especies, "Especies", "[internal] Gestion de especies")
+        Component(elaboraciones, "Elaboraciones", "[internal] Gestion de elaboraciones")
+        Component(envases, "Envases", "[internal] Gestion de envases")
+        Component(clasificaciones, "Clasificaciones", "[internal] Gestion de clasificaciones")
+        Component(productos, "Productos", "[internal] Gestion de productos")
+        Component(zonas, "Zonas", "[internal] Gestion de Zonas de pesca")
+        Component(artesPesca, "Artes de Pesca", "[internal] Gestion de Artes de pesca")
+    }    
+    
     Rel(buqueApp, buqueApi, "")
-    Rel(buqueMob, buqueApi, "")
     Rel(buqueApi, sqlLite, "Read/Write")
 }
 
-footer Aplicacion standalone de cada buque
+System_Boundary(buque_mob, "MOB"){
+    Container(buqueMob, "Buque Mobile App [UUID]", "Conectada via WiFi al API", "Para la sala de clasificaciones, gestion del almacen (congeladores) dentro del buque.")
+    Rel(buqueMob, buqueApi, "")
+}
+footer Componentes de aplicacion standalone de cada buque
 @enduml

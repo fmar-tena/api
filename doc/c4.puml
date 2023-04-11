@@ -19,8 +19,9 @@ Boundary(FreiremarInternal, "Freiremar Internal"){
     System(bi, "BI", "Data Analytics")
 }
 
-Boundary(FreiremarExternal, "Freiremar External"){
-    System_Ext(api, "API", "Azure API")    
+System(api, "API", "Azure API")    
+
+Boundary(FreiremarExternal, "Freiremar External"){    
     System_Ext(buque, "Buque", "Buques app")
     System_Ext(ex, "Email", "Email")
 }

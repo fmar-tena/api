@@ -1,0 +1,41 @@
+
+@startuml C4_Elements_2
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!include puml-resources/common.puml
+!define DEVICONS puml-resources/devicons
+!define FONTAWESOME puml-resources/font-awesome-5
+
+!include DEVICONS/angular.puml
+!include DEVICONS/krakenjs.puml
+!include FONTAWESOME/users.puml
+LAYOUT_TOP_DOWN()
+
+
+Boundary(az, "API"){   
+    Container(az_gw, "Azure GW", "Gateway")
+    Container(spa, "SPA", "Main API UI", "Modular, autorizable, integrada, escalable.", $sprite="angular")
+    Container(api, "Web API", "API")
+    Container(az_storage, "Azure Storage", "Storage")
+    Container(az_ad, "Azure AD", "Active Directory")
+    Container(az_fn, "Azure Functions", "Serverless functions")
+    Container(authz, "SSO", "Single Sign On")
+
+    ContainerDb(postgres, "DB Commands", "", "postgreSQL")
+    ContainerDb(redis, "DB Queries", "", "redis")
+
+    Rel(az_gw, api, "HTTPs/REST")
+    Rel(api, az_storage, "HTTPs/REST")
+    Rel(az_gw, az_fn, "")
+    Rel(az_fn, az_storage, "")
+    Rel(api, az_fn, "")
+    Rel(api, redis, "")
+    Rel(api, postgres, "")
+    Rel(az_gw, spa, "HTTPs/REST")
+    Rel(api, spa, "HTTPs/REST")
+    Rel(api, authz, "authorization")
+    Rel(authz, az_ad, "HTTPs/REST")
+}
+
+footer Detalle Api Central con Frontend 
+@enduml

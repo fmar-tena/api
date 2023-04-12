@@ -11,8 +11,8 @@
 !include FONTAWESOME/users.puml
 LAYOUT_TOP_DOWN()
 
-
 Boundary(az, "API"){   
+    Alice->Bob : hello <$foo1> there
     Container(api, "Web API", "API")    
     Container(spa, "SPA", "Main API UI", "Modular, autorizable, integrada, escalable.", $sprite="angular")
     Rel(api, spa, "HTTP/REST")
